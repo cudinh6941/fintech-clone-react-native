@@ -6,10 +6,11 @@ import { Link } from 'expo-router';
 import {View, Text, StyleSheet,TouchableOpacity} from 'react-native'
 
 const Page = () => {
-    const [asset] = useAssets([require('@/assets/videos/intro.mp4')])
+    const [asset,error] = useAssets([require('@/assets/videos/intro.mp4')])
     return (
         <View style={styles.container}>
-            {asset && <Video resizeMode={ResizeMode.COVER} isMuted isLooping shouldPlay source={{uri: asset[0].uri}} style={styles.video} />}
+            {asset && <Video resizeMode={ResizeMode.COVER} isMuted isLooping shouldPlay onError={(e) => console.log(e)
+            } source={{uri: asset[0].uri}} style={styles.video} />}
 
             <View style ={{marginTop: 80, padding: 20}}>
                 <Text style={styles.header}>Ready to change the way you make money</Text>

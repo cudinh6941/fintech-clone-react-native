@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 const Page = () => {
-  const [countryCode, setCountryCode] = useState('+84');
+  const [countryCode, setCountryCode] = useState('+15');
   const [phoneNumber, setPhoneNumber] = useState('');
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 80 : 0;
   const router = useRouter();

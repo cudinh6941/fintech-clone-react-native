@@ -1,13 +1,13 @@
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {Link} from 'expo-router';
+import {Link, useSegments} from 'expo-router';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import 'react-native-reanimated';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import * as SecueStore from 'expo-secure-store'
@@ -48,6 +48,7 @@ const InitialLayout = () => {
 
   const router = useRouter()
   const {isLoaded, isSignedIn} = useAuth();
+  const segments = useSegments()
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -60,11 +61,18 @@ const InitialLayout = () => {
   }, [loaded]);
 
   useEffect(() => {
+    const inAuthGroup = segments[0] === 'authenticated'
     console.log('isSignIn', isSignedIn);
-    
+    if (!isLoaded) return;
+    if(isSignedIn && !inAuthGroup) {
+      router.replace('/authenticated/tabs/home')
+    } else if (!isSignedIn) {
+      router.replace('/')
+    }
+
   },[isSignedIn])
-  if (!loaded) {
-    return null;
+  if (!loaded || !isLoaded) {
+    return <Text>Loading...</Text>
   }
 
   return (
@@ -116,6 +124,8 @@ const InitialLayout = () => {
         )
       }}
       />
+      <Stack.Screen name='authenticated/tabs' options={{headerShown: false}} />
+
   </Stack>
   )
 

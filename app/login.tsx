@@ -12,7 +12,7 @@ enum SignInType {
     Apple
 }
 const Page = () => {
-    const [countryCode, setCountryCode] = useState('+84');
+    const [countryCode, setCountryCode] = useState('+15');
     const [phoneNumber, setPhoneNumber] = useState('');
     const keyboardVerticalOffset = Platform.OS == 'ios' ? 90 : 0
     const router = useRouter()
@@ -33,7 +33,6 @@ const Page = () => {
                     strategy: 'phone_code',
                     phoneNumberId
                 })
-                await setActive!({ session: signIn!.createdSessionId });
                  router.push({pathname: '/verify/phone', params: {phone: fullPhoneNumber, signin: 'true'}})
             } catch (error) {
                 console.log('error', JSON.stringify(error, null, 2))
@@ -111,6 +110,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: Colors.lightGray,
         padding: 20,
+        width: 100,
         borderRadius: 16,
         fontSize: 20,
         marginHorizontal: 10,
