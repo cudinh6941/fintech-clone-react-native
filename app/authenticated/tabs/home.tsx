@@ -3,6 +3,7 @@ import RoundBtn from '@/components/custom/RoundButton'
 import Colors from '@/constants/Colors'
 import { defaultStyles } from '@/constants/Styles'
 import { useBalanceStore } from '@/store/balanceStore'
+import { Ionicons } from '@expo/vector-icons'
 import {View, Text, StyleSheet, ScrollView, Button} from 'react-native'
 const Home = () => {
     const { balance, runTransaction, transaction, clearTransactions } = useBalanceStore();
@@ -25,7 +26,7 @@ const Home = () => {
 
             <View style={styles.actionRow}>
                 <RoundBtn icon={'add'} text={'Add money'} onPress={onAddMoney}/>
-                <RoundBtn icon={'refresh'} text={'Exchange'} />
+                <RoundBtn icon={'refresh'} text={'Exchange'} onPress={clearTransactions} />
                 <RoundBtn icon={'list'} text={'Details'} />
                 <Dropdown/>
             </View>
@@ -33,8 +34,22 @@ const Home = () => {
             <Text style={defaultStyles.sectionHeader}>Transactions</Text>
             <View style={styles.transaction}>
                 {transaction.length === 0 && (
-                    <Text>No transactions yet</Text>
+                    <Text style={{padding: 14, color: Colors.gray}}>No transactions yet</Text>
                 )}
+                {transaction.map((transaction) => (
+                    <View key={transaction.id} style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
+                        <View style={styles.circle}>
+                            <Ionicons name={transaction.amount > 0 ? 'add' : 'remove'} size={24} color={Colors.primary} />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text style={{fontWeight: '400'}}>{transaction.title}</Text>
+                            <Text style={{color: Colors.gray, fontSize: 12}}>{transaction.date.toLocaleDateString()}</Text>
+                        </View>
+                        <Text>{transaction.amount}€</Text>
+                    </View>
+                ))}
+
+
             </View>
         </ScrollView>
     )
@@ -64,7 +79,19 @@ const styles = StyleSheet.create({
         padding: 20
     },
     transaction: {
-        marginHorizontal: 20
+        marginHorizontal: 20,
+        padding: 14, 
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        gap: 20
+    },
+    circle: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: Colors.lightGray,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 export default Home
